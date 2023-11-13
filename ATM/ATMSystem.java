@@ -1,16 +1,19 @@
 package ATM;
 
-import java.util.Scanner;
+import java.util.Scanner; //Scanner class provides various methods for reading user input.
+//java.util package contains classes,interfaces etc.
 
-class BankAccount {
+class UserBankAccount { // Creating UserBankAccount class
     private double balance;
 
-    public BankAccount(double initialBalance) {
+    public UserBankAccount(double initialBalance) {
+        // this keyword in java is used to refer to the current object within an
+        // instance or constructor
         this.balance = initialBalance;
     }
 
     public double getBalance() {
-        return balance;
+        return balance; // Returns the balance amount left.
     }
 
     public void deposit(double amount) {
@@ -35,16 +38,16 @@ class BankAccount {
 }
 
 class ATM {
-    private BankAccount userAccount;
+    private UserBankAccount userAccount;
 
-    public ATM(BankAccount userAccount) {
+    public ATM(UserBankAccount userAccount) {
         this.userAccount = userAccount;
     }
 
     public void displayMenu() {
         System.out.println("ATM Menu:");
-        System.out.println("1. Withdraw");
-        System.out.println("2. Deposit");
+        System.out.println("1. Withdraw Amount");
+        System.out.println("2. Deposit the Amount");
         System.out.println("3. Check Balance");
         System.out.println("4. Exit");
     }
@@ -95,14 +98,14 @@ public class ATMSystem {
         Scanner scanner = new Scanner(System.in);
 
         // Initialize the user's bank account with an initial balance
-        BankAccount userAccount = new BankAccount(1000.0);
+        UserBankAccount userAccount = new UserBankAccount(1000.0);
 
         // Create an ATM instance and connect it to the user's bank account
         ATM atm = new ATM(userAccount);
 
         // Main loop for the ATM interface
-        while (true) {
-            atm.displayMenu();
+        while (true) { // Infinite loop it keeps running untill it gets terminated
+            atm.displayMenu(); // displayMenu method used to display the menu to the user
             System.out.print("Enter your choice (1-4): ");
             int option = scanner.nextInt();
 
