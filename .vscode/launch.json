@@ -1,0 +1,45 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CurrencyConverter",
+            "request": "launch",
+            "mainClass": "CurrencyConverter.CurrencyConverter",
+            "projectName": "CodSoft_9ef71b0b"
+        },
+        {
+            "type": "java",
+            "name": "ATMSystem",
+            "request": "launch",
+            "mainClass": "ATM.ATMSystem",
+            "projectName": "CodSoft_9ef71b0b"
+        },
+        {
+            "type": "java",
+            "name": "Student_grade_calculator",
+            "request": "launch",
+            "mainClass": "Student_grade_calculator.Student_grade_calculator",
+            "projectName": "CodSoft_9ef71b0b"
+        },
+        {
+            "type": "java",
+            "name": "Number_Guess_Game",
+            "request": "launch",
+            "mainClass": "Number_Guess_Game",
+            "projectName": "CodSoft_9ef71b0b"
+        },
+        {
+            "type": "java",
+            "name": "Number_Game",
+            "request": "launch",
+            "mainClass": "Number_Game",
+            "projectName": "CodSoft_9ef71b0b"
+        },
+        {
+            "name": "Open testing124.html",
+            "request": "launch",
+            "type": "chrome",
+            "file": "C:\\xampp\\htdocs\\connect123\\testing124.html"
+        }
+    ]
+}
