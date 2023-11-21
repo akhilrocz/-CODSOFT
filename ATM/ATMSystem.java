@@ -71,9 +71,10 @@ class ATM {
                 System.out.println("Thank you for using the ATM. Goodbye!");
 
                 System.exit(0); // Succesful termination of program
-                return 0;
+                System.out.println("After exit the program wont be executed"); // This line wont be executed
             default:
                 System.out.println("Invalid option. Please try again.");
+                return -1;
         }
         return -1; // Abnoraml termination of program
     }
@@ -151,7 +152,6 @@ public class ATMSystem {
 
         // put() method is used to add new entries to "Map" object to updated the value
         // assocaited with that existing key
-        // Initialize user accounts (replace with your data)
         userAccounts.put(123, new UserBankAccount(1000.0));
         userAccounts.put(456, new UserBankAccount(2000.0));
 
