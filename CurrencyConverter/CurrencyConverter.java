@@ -1,18 +1,12 @@
 package CurrencyConverter;
 
-import javax.swing.*; //Contains classes for java swing api
-import java.awt.*; //containes all of the classes for creating user interfaces
-import java.awt.event.ActionEvent; //It is class in AWT package that represents a action event
-import java.awt.event.ActionListener; //Listens to particular actions
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.HashMap; //datastructure used to store exchange rates
-import java.util.Map; //Interface in java that maps keys to values
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class CurrencyConverter {
 
-    private static final Map<String, Double> currencyRates = new HashMap<>(); // variable value never gets changed
-
+    private static final Map<String, Double> currencyRates = new HashMap<>();
     static {
         currencyRates.put("USD", 1.0);
         currencyRates.put("EUR", 0.91);
@@ -20,83 +14,65 @@ public class CurrencyConverter {
         currencyRates.put("INR", 83.36);
     }
 
-
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new RunnableImplementation());
+        displayCurrencyOptions();
     }
 
     /**
      * 
      */
-    private static void extracted() {
-        JFrame frame = new JFrame("Currency Converter");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        panel.setPreferredSize(new Dimension(300, 200));
-        // Using enhanced for loop for iteration
+    private static void displayCurrencyOptions() {
+        System.out.println("Available currencies:");
         for (String currencyCode : currencyRates.keySet()) {
-            JButton button = new JButton(currencyCode);
-            button.addActionListener(new CurrencyConversionListener(currencyCode));
-            button.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    System.out.println("Key Pressed" + KeyEvent.getKeyText(0));
-                }
-            });
-            button.setBounds(100, 150, 100, 30);
-            panel.add(button);
-        }
-        frame.add(panel);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.getContentPane().setBackground(Color.BLUE);
-    }
-
-    private static final class RunnableImplementation implements Runnable {
-        @Override
-        public void run() {
-            extracted();
-        }
-    }
-
-    private static class CurrencyConversionListener implements ActionListener {
-
-        private String currencyCode;
-
-        public CurrencyConversionListener(String currencyCode) {
-            this.currencyCode = currencyCode;
+            System.out.println(currencyCode);
         }
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            double baserate = currencyRates.get(currencyCode);
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Enter the source currency code: ");
+            String sourceCurrency = scanner.nextLine().toUpperCase();
 
-            String Amount_Input = JOptionPane.showInputDialog("Enter the amount to convert:"); // Input dialog used to
-                                                                                               // enter amount
-            try {
-                double amount = Double.parseDouble(Amount_Input);
-
-                String Target_Currency_Code = JOptionPane.showInputDialog("Enter the target currency code:")
-                        .toUpperCase(); // Entered currency is converted to uppercase
-
-                if (!isValidCurrencyCode(Target_Currency_Code)) {
-                    JOptionPane.showMessageDialog(null, "Invalid target currency code.", "Error",
-                            JOptionPane.ERROR_MESSAGE); // Message dialog used to display message
-                    return;
-                }
-
-                double targetRate = currencyRates.get(Target_Currency_Code);
-                double convertedAmount = (amount / baserate) * targetRate;
-
-                JOptionPane.showMessageDialog(null, String.format("%.2f %s is equal to %.2f %s",
-                        amount, currencyCode, convertedAmount, Target_Currency_Code), "Conversion Result",
-                        JOptionPane.INFORMATION_MESSAGE);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Invalid amount. Please enter a valid number.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
+            if (!isValidCurrencyCode(sourceCurrency)) {
+                System.out.println("Invalid Base currency code.");
+                return;
             }
+
+            System.out.print("Enter the amount to convert: ");
+            double amount = scanner.nextDouble();
+
+            System.out.print("Enter the target currency code: ");
+            String targetCurrency = scanner.next().toUpperCase();
+
+            if (!isValidCurrencyCode(targetCurrency)) {
+                System.out.println("Invalid target currency code.");
+                return;
+            }
+
+            extracted2(sourceCurrency, amount, targetCurrency);
         }
+    }
+
+    private static void extracted2(String sourceCurrency, double amount, String targetCurrency) {
+        extracted(sourceCurrency, amount, targetCurrency);
+    }
+
+    private static void extracted(String sourceCurrency, double amount, String targetCurrency) {
+        convertCurrency(sourceCurrency, amount, targetCurrency);
+    }
+
+    /**
+     * @param sourceCurrency
+     * @param amount
+     * @param targetCurrency
+     */
+    private static void convertCurrency(String sourceCurrency, double amount, String targetCurrency) {
+        double Base_Rate = currencyRates.get(sourceCurrency);
+        double Target_Rate = currencyRates.get(targetCurrency);
+        double convertedAmount = (amount / Base_Rate) * Target_Rate;
+
+        System.out.printf("%.2f %s is equal to %.2f %s\n", amount, sourceCurrency, convertedAmount, targetCurrency);
     }
 
     private static boolean isValidCurrencyCode(String currencyCode) {
