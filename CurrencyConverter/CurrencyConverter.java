@@ -9,9 +9,9 @@ public class CurrencyConverter {
     private static final Map<String, Double> currencyRates = new HashMap<>();
     static {
         currencyRates.put("USD", 1.0);
-        currencyRates.put("EUR", 0.91);
+        currencyRates.put("EUR", 0.92);
         currencyRates.put("GBP", 0.79);
-        currencyRates.put("INR", 83.36);
+        currencyRates.put("INR", 83.22);
     }
 
     /**
