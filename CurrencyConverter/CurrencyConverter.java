@@ -35,7 +35,7 @@ public class CurrencyConverter {
             String sourceCurrency = scanner.nextLine().toUpperCase();
 
             if (!isValidCurrencyCode(sourceCurrency)) {
-                System.out.println("Invalid Base currency code.");
+                System.out.println("Invalid currency code");
                 return;
             }
 
