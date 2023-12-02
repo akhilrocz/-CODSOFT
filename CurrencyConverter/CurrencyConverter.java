@@ -22,7 +22,7 @@ public class CurrencyConverter {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> extracted());
+        SwingUtilities.invokeLater(new RunnableImplementation());
     }
 
     /**
@@ -53,6 +53,13 @@ public class CurrencyConverter {
         frame.getContentPane().setBackground(Color.BLUE);
     }
 
+    private static final class RunnableImplementation implements Runnable {
+        @Override
+        public void run() {
+            extracted();
+        }
+    }
+
     private static class CurrencyConversionListener implements ActionListener {
 
         private String currencyCode;
@@ -65,16 +72,17 @@ public class CurrencyConverter {
         public void actionPerformed(ActionEvent e) {
             double baserate = currencyRates.get(currencyCode);
 
-            String Amount_Input = JOptionPane.showInputDialog("Enter the amount to convert:");
+            String Amount_Input = JOptionPane.showInputDialog("Enter the amount to convert:"); // Input dialog used to
+                                                                                               // enter amount
             try {
                 double amount = Double.parseDouble(Amount_Input);
 
                 String Target_Currency_Code = JOptionPane.showInputDialog("Enter the target currency code:")
-                        .toUpperCase();
+                        .toUpperCase(); // Entered currency is converted to uppercase
 
                 if (!isValidCurrencyCode(Target_Currency_Code)) {
                     JOptionPane.showMessageDialog(null, "Invalid target currency code.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.ERROR_MESSAGE); // Message dialog used to display message
                     return;
                 }
 
