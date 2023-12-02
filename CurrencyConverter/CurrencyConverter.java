@@ -1,79 +1,97 @@
 package CurrencyConverter;
 
-import java.util.HashMap; //Implements the Map Interface and stores key-value pairs
-import java.util.Map; //Map Interface is collection of key-value pairs
-import java.util.Scanner; //Implements Scanner class and takes user input
+import javax.swing.*; //Contains classes for java swing api
+import java.awt.*; //containes all of the classes for creating user interfaces
+import java.awt.event.ActionEvent; //It is class in AWT package that represents a action event
+import java.awt.event.ActionListener; //Listens to particular actions
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.HashMap; //datastructure used to store exchange rates
+import java.util.Map; //Interface in java that maps keys to values
 
 public class CurrencyConverter {
 
-    private static Map<String, Double> exchangeRates; // private static variable exchange rates
+    private static final Map<String, Double> currencyRates = new HashMap<>(); // variable value never gets changed
 
-    // Static Intialization block is used to intialize static variables
     static {
-        // Initialize exchange rates (These are fixed for demonstration purposes)
-        exchangeRates = new HashMap<>(); // HashMap class is used for storing key-value pairs
-        exchangeRates.put("USD", 1.0);
-        exchangeRates.put("EUR", 0.9361);
-        exchangeRates.put("GBP", 0.8184);
-        exchangeRates.put("INR", 83.31);
+        currencyRates.put("USD", 1.0);
+        currencyRates.put("EUR", 0.91);
+        currencyRates.put("GBP", 0.79);
+        currencyRates.put("INR", 83.36);
     }
+
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        for (Map.Entry<String, Double> entry : exchangeRates.entrySet()) {
-            String currencyCode = entry.getKey();
-            double rate = entry.getValue();
-            System.out.println(currencyCode + ": " + rate);
-        }
-
-        System.out.println("Currency Converter Implementation in java");
-
-        // Display available currencies
-        System.out.println("Available Currencies: USD, EUR, GBP, INR");
-        System.out.print("Enter the base currency code: ");
-        String baseCurrency = sc.next().toUpperCase(); // Converts base currency input to uppercase
-
-        System.out.print("Enter the target currency code: ");
-        String targetCurrency = sc.next().toUpperCase(); // converts target currency input to uppercase
-
-        // Checks the user entered currency is valid or not
-        if (!isValidCurrency(baseCurrency) || !isValidCurrency(targetCurrency)) {
-            System.out.println("Invalid currency codes.");
-            System.exit(1); // Indicates It is a Abnormal termination.
-            // If the exit method returns 1 and some other positive number that means some
-            // exception occured
-        }
-
-        System.out.print("Enter the amount to convert: ");
-        double amount = sc.nextDouble();
-
-        // Validate the amount
-        if (amount <= 0) {
-            System.out.println("Invalid amount. Exiting...");
-            System.exit(1); // Abnormal termination
-        }
-
-        // Perform currency conversion
-        double convertedAmount = convertCurrency(amount, baseCurrency, targetCurrency);
-
-        // Display the result
-        System.out.printf("%.2f %s is equal to %.2f %s%n",
-                amount, baseCurrency, convertedAmount, targetCurrency);
-
-        sc.close(); // Closing scanner class to release the resources
+        SwingUtilities.invokeLater(() -> extracted());
     }
 
-    private static boolean isValidCurrency(String currencyCode) {
-        return exchangeRates.containsKey(currencyCode);
+    /**
+     * 
+     */
+    private static void extracted() {
+        JFrame frame = new JFrame("Currency Converter");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panel.setPreferredSize(new Dimension(300, 200));
+        // Using enhanced for loop for iteration
+        for (String currencyCode : currencyRates.keySet()) {
+            JButton button = new JButton(currencyCode);
+            button.addActionListener(new CurrencyConversionListener(currencyCode));
+            button.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    System.out.println("Key Pressed" + KeyEvent.getKeyText(0));
+                }
+            });
+            button.setBounds(100, 150, 100, 30);
+            panel.add(button);
+        }
+        frame.add(panel);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.getContentPane().setBackground(Color.BLUE);
     }
-    private static double convertCurrency(double amount, String baseCurrency, String targetCurrency) {
-        // get method is used for retreiving the values associated with the key
-        // "baseCurrency,targetCurrency" from the "exchangeRates" Map.
-        double baseRate = exchangeRates.get(baseCurrency);
-        double targetRate = exchangeRates.get(targetCurrency);
 
-        // Conversion formula: targetAmount = (amount / baseRate) * targetRate
-        return (amount / baseRate) * targetRate; // Coversion formula
+    private static class CurrencyConversionListener implements ActionListener {
+
+        private String currencyCode;
+
+        public CurrencyConversionListener(String currencyCode) {
+            this.currencyCode = currencyCode;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            double baserate = currencyRates.get(currencyCode);
+
+            String Amount_Input = JOptionPane.showInputDialog("Enter the amount to convert:");
+            try {
+                double amount = Double.parseDouble(Amount_Input);
+
+                String Target_Currency_Code = JOptionPane.showInputDialog("Enter the target currency code:")
+                        .toUpperCase();
+
+                if (!isValidCurrencyCode(Target_Currency_Code)) {
+                    JOptionPane.showMessageDialog(null, "Invalid target currency code.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                double targetRate = currencyRates.get(Target_Currency_Code);
+                double convertedAmount = (amount / baserate) * targetRate;
+
+                JOptionPane.showMessageDialog(null, String.format("%.2f %s is equal to %.2f %s",
+                        amount, currencyCode, convertedAmount, Target_Currency_Code), "Conversion Result",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid amount. Please enter a valid number.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private static boolean isValidCurrencyCode(String currencyCode) {
+        return currencyRates.containsKey(currencyCode);
     }
 }
-
